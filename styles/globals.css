@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { @apply bg-ink text-[#E8EEF9] antialiased; }
+::selection { background: rgba(79,224,255,.28); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #070B14; }
+::-webkit-scrollbar-thumb { background: #1c2942; border-radius: 6px; border: 2px solid #070B14; }
+
+/* фоновая сетка */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(140,160,195,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140,160,195,.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 30%, transparent 90%);
+}
+/* шум */
+.noise {
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* угловые засечки панелей */
+.corners { position: relative; }
+.corners::before, .corners::after {
+  content: ''; position: absolute; width: 14px; height: 14px;
+  border: 0 solid rgba(79,224,255,.8); z-index: 2; pointer-events: none;
+}
+.corners::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; border-radius: 4px 0 0 0; }
+.corners::after  { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; border-radius: 0 0 4px 0; }
+
+.kicker {
+  @apply font-mono text-[11px] uppercase tracking-[.3em] text-accent flex items-center gap-3.5;
+}
+.kicker::after { content: ''; @apply h-px w-16 bg-gradient-to-r from-accent to-transparent; }
+
+.field {
+  @apply w-full bg-black/40 border border-line2 rounded-xl px-4 py-3 text-[15px] text-white outline-none
+         transition focus:border-accent focus:ring-[3px] focus:ring-accent/15 placeholder:text-dim;
+}
+.field.err { @apply border-coral animate-shake; }
+
+.btn-shimmer::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.55) 50%, transparent 60%);
+  transform: translateX(-120%); transition: transform .7s;
+}
+.btn-shimmer:hover::after { transform: translateX(120%); }
+
+/* печать PDF */
+.print-area { display: none; }
+@media print {
+  body * { visibility: hidden; }
+  .print-area { display: block; position: absolute; inset: 0; width: 100%; background: #fff; }
+  .print-area * { visibility: visible; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
